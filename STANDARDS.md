@@ -7,7 +7,7 @@ These are the styles agreed upon by the Front End Team for the Home Depot RenoWa
 # Table of content
 * [General](#general)
     * [Directory structure](#directory-structure)
-    * [Markup](#markup)
+    * [Build](#build)
     * [Others](#others)
 * [Modules](#modules)
 * [Controllers](#controllers)
@@ -16,21 +16,12 @@ These are the styles agreed upon by the Front End Team for the Home Depot RenoWa
 * [Services](#services)
 * [Templates](#templates)
 * [Routing](#routing)
-* [i18n](#i18n)
-* [Performance](#performance)
-* [Contribution](#contribution)
-* [Contributors](#contributors)
 
 # General
 
 ## Directory structure
 
-Since a large AngularJS application has many components it's best to structure it in a directory hierarchy.
-
-
 * Create high-level divisions by functionality and lower-level divisions by component types.
-
-Here is its layout:
 
 ```
 .
@@ -95,39 +86,23 @@ app
         └── directive2.sass
 ```
 
-* Each JavaScript file should only hold **a single component**. The file should be named with the component's name.
+## Build
 
-Conventions about component naming can be found in each component section.
-
-## Markup
-
-Other HTML atributes should follow the Code Guide's [recommendation](http://mdo.github.io/code-guide/#html-attribute-order)
+* Automate build workflow using:
+    * [Grunt](http://gruntjs.com)
+    * [Bower](http://bower.io)
 
 ## Others
 
-* Use:
+* Use angular objects:
     * `$timeout` instead of `setTimeout`
     * `$interval` instead of `setInterval`
     * `$window` instead of `window`
     * `$document` instead of `document`
     * `$http` instead of `$.ajax`
 
-This will make your testing easier and in some cases prevent unexpected behaviour (for example, if you missed `$scope.$apply` in `setTimeout`).
-
-* Automate workflow using:
-    * [Grunt](http://gruntjs.com)
-    * [Bower](http://bower.io)
-
-* Don't use globals. Resolve all dependencies using Dependency Injection, this will prevent bugs and monkey patching when testing.
-
-* Do not pollute your `$scope`. Only add functions and variables that are being used in the templates.
-* Prefer the usage of [controllers instead of `ngInit`](https://github.com/angular/angular.js/pull/4366/files). The only appropriate use of `ngInit` is for aliasing special properties of `ngRepeat`. Besides this case, you should use controllers rather than `ngInit` to initialize values on a scope. The expression passed to `ngInit` should go through lexing, parsing and evaluation by the Angular interpreter implemented inside the `$parse` service. This leads to:
-    - Performance impact, because the interpreter is implemented in JavaScript
-    - The caching of the parsed expressions inside the `$parse` service doesn't make a lot of sense in most cases, since `ngInit` expressions are often evaluated only once
-    - Is error-prone, since you're writing strings inside your templates, there's no syntax highlighting and further support by your editor
-    - No run-time errors are thrown
-* Do not use `$` prefix for the names of variables, properties and methods. This prefix is reserved for AngularJS usage.
-* When resolving dependencies through the DI mechanism of AngularJS, sort the dependencies by their type - the built-in AngularJS dependencies should be first, followed by your custom ones:
+* Don't use global variables. Resolve all dependencies using Dependency Injection.
+* When resolving dependency injections, the built-in AngularJS dependencies should be first, followed by your custom ones:
 
 ```javascript
 module.factory('Service', function ($rootScope, $timeout, MyCustomDependency1, MyCustomDependency2) {
@@ -140,7 +115,7 @@ module.factory('Service', function ($rootScope, $timeout, MyCustomDependency1, M
 # Modules
 
 * Modules should be named with lowerCamelCase. 
-* For indicating that module `b` is submodule of module `a` you can nest them by using namespacing like: `a.b`.
+* For indicating that module `login` is submodule of module `renoApp` you can nest them by using namespacing like: `renoApp.login`.
 
 ```javascript
 angular.module('app.login', []);
@@ -148,36 +123,13 @@ angular.module('app.login', []);
 
 # Controllers
 
-* Do not manipulate DOM in your controllers, this will make your controllers harder for testing and will violate the [Separation of Concerns principle](https://en.wikipedia.org/wiki/Separation_of_concerns). Use directives instead.
-* The naming of the controller is done using the controller's functionality (for example shopping cart, homepage, admin panel) and the substring `Ctrl` or `Controller` in the end.
-* Controllers are plain javascript [constructors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor), so they will be named UpperCamelCase (`HomePageCtrl`, `ShoppingCartCtrl`, `AdminPanelCtrl`, etc.).
-* The controllers should not be defined as globals (even though AngularJS allows this, it is a bad practice to pollute the global namespace).
-* Use the following syntax for defining controllers:
+* Controllers should be named with UpperCamelCase (`loginController`, `userController`, etc.).
+* The naming of the controller is done using the controller's functionality (for example login, user, group) and the substring `Ctrl` or `Controller` in the end.
+* Do not manipulate DOM in your controllers, use directives instead.
+* We need to define a syntax for defining controllers and place it below:
 
   ```JavaScript
   ```
-
-   Digging more into `controller as`: [digging-into-angulars-controller-as-syntax](http://toddmotto.com/digging-into-angulars-controller-as-syntax/)
-* If using array definition syntax, use the original names of the controller's dependencies. This will help you produce more readable code:
-
-  ```JavaScript
-  function MyCtrl(s) {
-    // ...
-  }
-
-  module.controller('MyCtrl', ['$scope', MyCtrl]);
-  ```
-
-   which is less readable than:
-
-  ```JavaScript
-  function MyCtrl($scope) {
-    // ...
-  }
-  module.controller('MyCtrl', ['$scope', MyCtrl]);
-  ```
-
-   This especially applies to a file that has so much code that you'd need to scroll through. This would possibly cause you to forget which variable is tied to which dependency.
 
 * Make the controllers as lean as possible. Abstract commonly used functions into a service.
 * Avoid writing business logic inside controllers. Delegate business logic to a `model`, using a service.
@@ -206,7 +158,7 @@ angular.module('app.login', []);
   });
   ```
 
-  When delegating business logic into a 'model' service, controller will look like this (see 'use services as your Model' for service-model implementation):
+  When delegating business logic into a 'model' service, controller will look like this:
 
   ```Javascript
   //Order is used as a 'model'
@@ -256,7 +208,7 @@ angular.module('app.login', []);
 # Directives
 
 * Name your directives with lowerCamelCase.
-* Use `scope` instead of `$scope` in your link function. In the compile, post/pre link functions you have already defined arguments which will be passed when the function is invoked, you won't be able to change them using DI. This style is also used in AngularJS's source code.
+* Use `scope` instead of `$scope` in your link function? This style is also used in AngularJS's source code.
 * Use custom prefixes for your directives to prevent name collisions with third-party libraries.
 * Do not use `ng` or `ui` prefixes since they are reserved for AngularJS and AngularJS UI usage.
 * DOM manipulations must be done only through directives.
