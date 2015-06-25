@@ -5,7 +5,7 @@ STANDARDS FOR THE FRONTEND
 These are the styles agreed upon by the Front End Team for the Home Depot RenoWalk app.
 
 # Table of content
-* [General](#general)
+* [General](#generals)
     * [Directory structure](#directory-structure)
     * [Markup](#markup)
     * [Others](#others)
@@ -139,7 +139,8 @@ module.factory('Service', function ($rootScope, $timeout, MyCustomDependency1, M
 
 # Modules
 
-* Modules should be named with lowerCamelCase. For indicating that module `b` is submodule of module `a` you can nest them by using namespacing like: `a.b`.
+* Modules should be named with lowerCamelCase. 
+* For indicating that module `b` is submodule of module `a` you can nest them by using namespacing like: `a.b`.
 
 ```javascript
 angular.module('app.login', []);
@@ -148,7 +149,7 @@ angular.module('app.login', []);
 # Controllers
 
 * Do not manipulate DOM in your controllers, this will make your controllers harder for testing and will violate the [Separation of Concerns principle](https://en.wikipedia.org/wiki/Separation_of_concerns). Use directives instead.
-* The naming of the controller is done using the controller's functionality (for example shopping cart, homepage, admin panel) and the substring `Ctrl` in the end.
+* The naming of the controller is done using the controller's functionality (for example shopping cart, homepage, admin panel) and the substring `Ctrl` or `Controller` in the end.
 * Controllers are plain javascript [constructors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor), so they will be named UpperCamelCase (`HomePageCtrl`, `ShoppingCartCtrl`, `AdminPanelCtrl`, etc.).
 * The controllers should not be defined as globals (even though AngularJS allows this, it is a bad practice to pollute the global namespace).
 * Use the following syntax for defining controllers:
