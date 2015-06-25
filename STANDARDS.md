@@ -5,7 +5,7 @@ STANDARDS FOR THE FRONTEND
 These are the styles agreed upon by the Front End Team for the Home Depot RenoWalk app.
 
 # Table of content
-* [General](#generals)
+* [General](#general)
     * [Directory structure](#directory-structure)
     * [Markup](#markup)
     * [Others](#others)
