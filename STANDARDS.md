@@ -2,6 +2,8 @@
 
 These are the styles agreed upon by the Front End Team for the Home Depot RenoWalk app.
 
+**Note**: This will be a live document, updated as the project continues, and more items are agreed upon.
+
 # Table of content
 * [General](#general)
     * [Directory structure](#directory-structure)
