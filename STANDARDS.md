@@ -1,5 +1,3 @@
-# STYLE GUIDE FOR THE FRONT END
-
 # Introduction
 
 These are the styles agreed upon by the Front End Team for the Home Depot RenoWalk app.
